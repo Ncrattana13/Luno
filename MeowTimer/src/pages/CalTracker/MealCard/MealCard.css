@@ -1,0 +1,33 @@
+.day-box {
+    background-color: rgb(243, 243, 229);
+    /* border: 1px solid black; */
+    width: 250px;
+    height: 300px;
+    font-family: monospace;
+    font-size: small;
+    padding-right: 12px;
+}
+
+.day-box h4{
+    justify-self: center;
+    /* border: 3px solid white; */
+    border-radius: 15px;
+    padding: 2px 5px;
+    color: var(--yellow);  
+}
+
+.day-box button{
+    background: none;
+    border:none;
+    color: rgb(255, 0, 0);
+    height: 18px;
+    width: 18px;
+
+    text-align: center;
+
+
+}
+
+.day-box button:hover{
+    color: pink;
+}

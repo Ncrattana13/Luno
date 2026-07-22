@@ -1,0 +1,111 @@
+.card-box{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 200px;
+    height: 320px;
+    background-color: white;
+    border: 2px solid var(--red);
+    border-radius: 8px;
+    padding: 10px;    
+}
+
+.add-card-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 320px;
+    background-color: white;
+    border: 2px dashed rgb(145, 137, 137);
+    border-radius: 8px;
+    padding: 10px; 
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;   
+    cursor: pointer;
+    color: rgb(209, 209, 209);
+    font-size: 150px;
+
+}
+
+.card-box img{
+    width: 150px;
+    height: 180px;
+    background-color: rgb(216, 216, 216);
+    border: 1px solid var(--red);
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 10px;
+    margin-top: 25px;
+    cursor: pointer;
+}
+
+.card-box p {
+    display: flex;
+    font-size: 11px;
+    color: var(--red);
+    font-weight: bold;
+    line-height: 1.3;
+    margin: 5px 0px;
+}
+
+.card-location button{
+    background-color: var(--dark-blue);
+    position: absolute;
+    right: 8px;
+    bottom: 10px;
+    color: lightblue;
+    border: 1px solid lightblue;
+    border-radius: 50px;
+    padding: 2px 8px;
+    font-size: 10px;
+    
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+}
+
+.card-location button:hover{
+    background-color: rgb(34, 122, 93);
+}
+
+.like-button {
+    position: absolute;
+    right: 20px;
+    /* right: 1px; */
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 5px;
+    color: rgb(142, 126, 126);
+    /* border: 1px solid red; */
+    /* background-color: white; */
+}
+
+#liked {
+    color: darkred;
+}
+
+.like-button:hover {
+    background: none;
+    border: none;
+    color: inherit;
+}
+
+
+.card-box {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 10px var(--dark-blue);
+}
+
+.add-card-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 10px var(--dark-blue);
+}

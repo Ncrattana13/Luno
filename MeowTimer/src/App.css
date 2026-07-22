@@ -1,0 +1,251 @@
+:root {
+  --orange: #D95D39;
+  --yellow: #F18805;
+  --dark-blue: #0B4F6C;
+  --red: #581F18;
+  --warm-white: #FDF0D5;
+  --font-main: "Lucida Console", Monaco, monospace;
+}
+
+body{
+    font-family: var(--font-main);
+    background-color: var(--warm-white);
+}
+
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    min-height: 100vh;
+    /* border: 3px solid red; */
+    padding: 50px 80px 50px 80px;
+    flex-direction: row;
+    /* flex-wrap: wrap; */
+  }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: large;
+  /* height: 80px; */
+  /* border: 2px solid rebeccapurple; */
+  color: var(--orange);
+  background-color: var(--dark-blue);
+}
+
+.nav-bar{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 20px;
+  padding: 0px 60px 0px 60px;
+  border-top: 1px solid rgb(26, 131, 96);
+  /* width: 100%; */
+  background-color: #F18805;
+  color: #FDF0D5;
+  height: 30px;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+}
+
+.nav-bar p, a{
+  border-inline: 1px solid var(--warm-white);
+  padding: 0px 5px;
+  font-size: clamp(9px, 1vw, 12px);  
+  color: var(--warm-white);
+  text-decoration: none;
+}
+
+.nav-bar :hover{
+  color: var(--dark-blue);
+}
+
+.box{  
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  border: 1px solid rgb(60, 255, 0);
+  /* padding-top: 20px; */
+  text-align: center;
+}
+
+#top{
+
+}
+
+#bottom{
+
+}
+
+button{
+  background-color: var(--dark-blue);
+  cursor: pointer;
+  color: var(--warm-white);
+}
+
+button:hover {
+  background-color: var(--yellow);
+}
+
+button:active {
+  /* background-color: #581f18; */
+}
+
+.me-container{
+  display: flex;
+  background-color: white;
+  width: 80%;
+  height: auto;
+
+  border: 2px solid var(--dark-blue);
+  border-radius: 15px;
+
+  /* justify-content: center; */
+  flex-direction: column;
+}
+
+.left-container{
+    position: sticky;
+    top: 50px;
+    transition: top 0.3s ease;
+
+
+    display: flex;
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* background-color: brown; */
+    width: fit-content;
+    height: 70vh;
+    padding-right: 50px;
+    /* padding: 30px 10px 0px 50px; */
+    /* justify-content: space-between; */
+
+}
+
+.right-container{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 75vw;
+  height: auto;
+  border: 3px solid var(--dark-blue);
+  border-radius: 15px;
+  padding: 50px;
+}
+
+.right-container-header{
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ padding-bottom: 20px;
+}
+
+.right-container-bottom{
+  display: flex;
+  /* background-color: #581F18; */
+  /* justify-content: flex-start; */
+  width: auto;
+}
+
+#timer {
+  flex-direction: column;
+  align-items: center;
+}
+
+#brag {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* justify-content: space-around; */
+  gap: 50px;
+  /* padding: 50px 20px; */
+  padding-left: 40px;
+  width: 100%;
+} 
+
+/*Modal image*/
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: 400px;
+  max-width: 85%;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  text-align: center;
+}
+
+.modal-content img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+
+  border: none;
+  background: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+ 
+
+.modal-close:hover {
+  background: none;
+}
+
+/*--------- Cal Tracker ---------*/
+#cal-tracker button{
+  height: 23px;
+  width: 27px;
+}
+
+#cal-tracker-top {
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 20%;
+  align-items: center;
+}
+
+#cal-tracker-top input{
+  width: fit-content;
+  height: 30%;
+}
+
+.food-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* background-color: #0B4F6C; */
+  /* border: 1px solid black; */
+  width: 90%;
+  flex-wrap: wrap;
+  padding: 0 10px;
+  gap: 10px
+}
+
+#cal-tracker-bottom {
+  flex-direction: column;
+  /* align-items: center; */
+}

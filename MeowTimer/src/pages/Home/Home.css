@@ -1,0 +1,77 @@
+/* button{
+    border: 1px solid red;
+} */
+.body-container{
+   display: flex;
+   flex-direction: column;
+   background-color: white;
+   border: 2px solid var(--dark-blue);
+   border-radius: 20px;
+   width: 90vw;
+   height: 50vh;
+   justify-content: center;
+   align-items: center;
+   /* background-color: blue; */
+   /* align-items: flex-start; */
+}
+
+
+
+.box{
+
+}
+
+#top{
+
+}
+
+#bottom{
+
+}
+
+.cat-image {
+  width: 100px;
+  height: auto;
+}
+
+.home-buttons {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    /* background: red; */
+  /* justify-content: start; */
+}
+
+.home-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    width: 150px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.home-buttons img{
+    width: 20px;
+    height: auto;
+    align-self: flex-end;
+}
+
+.home-box {
+    background-color: white;
+    border: 2px solid var(--dark-blue);
+    width: 100%;
+    height: 70vh;
+    border-radius: 30px;
+}
+
+.select-button button{
+    background-color: var(--red);
+}
+
+.select-button:hover button{
+    background-color: var(--yellow);
+}
