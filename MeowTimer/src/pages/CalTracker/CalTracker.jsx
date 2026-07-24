@@ -8,16 +8,128 @@ import catBrag from '../../img/cat-brag.png';
 import { useHistory } from "react-router-dom";
 import './MealCard/MealCard.css'
 import MealCard from "./MealCard/MealCard";
-import { addConsumed } from "./CalTracker.helpers";
+import './CalTracker.css'
+import { addConsumed, toggleAddFood, togglePantry, toggleAddBlock } from "./CalTracker.helpers";
 
 function CalTracker(){
     const history = useHistory();
-    const [activeMeal, setActiveMeal] = useState("Breakfast");
+    const [activeMeal, setActiveMeal] = useState("");
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [cal, setCal] = useState(0);
     const [edit, setEdit] = useState(false);
     const [addFood, setAddFood] = useState(false);
+    const [inputSearch, setInputSearch] = useState('')
+    useEffect(() => {}, [inputSearch]);
+    
+    /*Pantry */
+    const [pantry, setPantry] = useState(false);
+    const openPantry = () => {
+        setPantry(!pantry);
+    }
+    const [addBlock, setAddBlock] = useState(false);
 
+    const [addDish, setAddDish] = useState(false);
+    const [createDish, setCreateDish] = useState(false);
+    const [createIngredient, setCreateIngredient] = useState(false);
+    
+    const [ingredientName, setIngredientName] = useState(''); 
+    const [ingredientAmount, setIngredientAmount] = useState(0);
+    const [ingredientUnit, setIngredientUnit] = useState('');
+    const [ingredientKcal, setIngredientKcal] = useState(0);
+
+    const [ingredients, setIngredients] = useState(()=>{
+        const saved = localStorage.getItem("ingredients");
+        if (!saved || saved === "undefined") {
+            return [{
+                id: crypto.randomUUID(),
+                name: 'Shrimp',
+                amount: 85,
+                unit: 'g',
+                kcal: 84 },
+                {
+                id: crypto.randomUUID(),
+                name: 'Boil Egg',
+                amount: 1,
+                unit: 'egg',
+                kcal: 75},
+            ];
+        }
+        return JSON.parse(saved);
+    });
+
+    const addIngredients = (inName, inAmount, inUnit, inKcal) => {
+        const newIngredient = {
+            id: crypto.randomUUID(),
+            name: inName,
+            amount: inAmount,
+            unit: inUnit,
+            kcal: inKcal
+        }
+        setIngredients([...ingredients, newIngredient]);
+    };
+
+    const handleAddInClick = () => {
+        addIngredients(ingredientName, ingredientAmount, ingredientUnit, ingredientKcal);
+        setIngredientName('');
+        setIngredientAmount(0);
+        setIngredientUnit('');
+        setIngredientKcal(0);
+        setCreateIngredient(false);
+    };
+
+    const filteredIngredients = ingredients.filter((ingredient) =>
+        ingredient.name.toLowerCase().includes(inputSearch.toLowerCase())
+    );
+
+    const removeIngredient = (id) => {
+        setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
+    };
+
+    const [pantrySelectedIngredients, setPantrySelectedIngredients] = useState([]);
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+    const [pantryKcal, setPantryKcal] = useState(0);
+    
+    useEffect(() => {
+        const total = pantrySelectedIngredients.reduce(
+        (sum, ing) => sum + (ing.newKcal ?? ing.kcal), 0
+        );
+        setInputKcal(total);
+    }, [pantrySelectedIngredients])
+
+    const removeSelectedIngredient = (timeStamp) => {
+        setSelectedIngredients(selectedIngredients.filter(i => i.timeStamp !== timeStamp));
+    };
+
+    const removePantrySelectedIngredient = (timeStamp) => {
+        setPantrySelectedIngredients(pantrySelectedIngredients.filter(i => i.timeStamp !== timeStamp));
+    };
+    
+    const [changeAmountId, setChangeAmountId] = useState(null);
+    const [newAmount, setNewAmount] = useState(0);
+
+    const [dishChangeAmountId, setDishChangeAmountId] = useState(null); 
+    const [dishNewAmount, setDishNewAmount] = useState(0);
+
+    const kcalCalculation = (amount, kcal, newAmount) => {
+        const newKcal = (kcal/amount) * newAmount;
+        return Math.ceil(newAmount === amount ? kcal : newKcal);
+    };
+
+    const handleAddDish = () => {
+        const totalKcal = selectedIngredients.reduce(
+            (sum, ing) => sum + (ing.newKcal ?? ing.kcal), 0);
+
+        addItem(inputName, totalKcal, inputServing, inputSize);
+
+        setSelectedIngredients([]);
+        setInputName('');
+        setInputServing(0);
+        setInputSize(0);
+        setCreateDish(false);
+        };
+
+    /*Consumed*/
     const [consumed, setConsumed] = useState(() => {
         const saved = localStorage.getItem("consumed");
         if (!saved || saved === "undefined") {
@@ -27,6 +139,7 @@ function CalTracker(){
         return JSON.parse(saved);
     });
 
+    /*Item in Pantry */
     const [items, setItems] = useState(() => {
         const saved = localStorage.getItem("items");
         if (!saved || saved === "undefined" || saved === "[]") {
@@ -48,26 +161,10 @@ function CalTracker(){
     const [inputKcal, setInputKcal] = useState(0);
     const [inputServing, setInputServing] = useState(0);
     const [inputSize, setInputSize] = useState(0);
-
     
-    const [inputSearch, setInputSearch] = useState('')
-    useEffect(() => {
-
-    }, [inputSearch]);
-
     const filteredItems = items.filter((item) =>
         item.name.toLowerCase().includes(inputSearch.toLowerCase())
     );
-
-    
-
-    const [addBlock, setAddBlock] = useState(false);
-
-    // const [items, setItems] = useState([]);
-    const [pantry, setPantry] = useState(false);
-    const openPantry = () => {
-        setPantry(!pantry);
-    }
 
     const addItem = (name, kcal, serving, size) => {
         const newItem = {
@@ -89,6 +186,7 @@ function CalTracker(){
     }
 
     const handleAddClick = () => {
+        if (!inputName.trim()) return;
         addItem(inputName, inputKcal, inputServing, inputSize);
         setInputName('');
         setInputKcal(0);
@@ -96,6 +194,21 @@ function CalTracker(){
         setInputSize(0);
         setAddBlock(false);
     };
+
+    const handleQuickAddClick = () => {
+        if (!inputName.trim()) return; // require a non-empty name
+
+        addConsumed(
+            { name: inputName, kcal: Number(inputKcal), timeStamp: Date.now(), mealType: activeMeal, ingredients: pantrySelectedIngredients },
+            setConsumed,
+            selectedDate,
+            consumed
+        );
+
+        setInputName('');
+        setInputKcal(0);
+        setPantrySelectedIngredients([]);
+    };  
 
     const showAdd = () => {
         setAddBlock(!addBlock);
@@ -112,10 +225,10 @@ function CalTracker(){
     useEffect(() => {
         localStorage.setItem("consumed", JSON.stringify(consumed));
         localStorage.setItem("items", JSON.stringify(items));
+        localStorage.setItem("ingredients", JSON.stringify(ingredients));
 
-    }, [items, consumed]);
 
-
+    }, [items, consumed, ingredients]);
 
     return (
         <>
@@ -157,9 +270,7 @@ function CalTracker(){
                             value={selectedDate.format("YYYY-MM-DD")}
                             onChange={(e) => setSelectedDate(dayjs(e.target.value))}
                         />                    
-                    
-                    
-                  
+                      
                         <h3> Total Calories: {cal} </h3>
                 
                     
@@ -203,7 +314,14 @@ function CalTracker(){
                         </>
                     )}
                     </div> */}
-                    <div style={{ display: "flex", gap: "6px", paddingTop: "10px" }}>
+                    <div>
+                        <button onClick={() => toggleAddFood(addFood, setAddFood, setPantry,
+                            setAddDish, setCreateDish, setCreateIngredient, setChangeAmountId, setNewAmount, setSelectedIngredients, setActiveMeal
+                            )}> Add New
+                        </button>
+                    </div>
+
+                    { addFood && <div style={{ display: "flex", gap: "6px", paddingTop: "10px" }}>
                         {["Breakfast", "Lunch", "Dinner"].map((m) => (
                             <button
                                 key={m}
@@ -216,34 +334,51 @@ function CalTracker(){
                                 {m}
                             </button>
                         ))}
-                    </div>
-                    
-                        
-                    <div style={{paddingTop:'20px'}}> 
-                        <button onClick={()=> setAddFood(true)}>Add Food</button>
-                        <button onClick={openPantry}> Your Pantry </button>
-                    </div>
-                    
-                    {addFood && (
+                    </div> }
+                                        
+                    {activeMeal && addFood && (
                         <div>
-                            <div style={{display: 'flex', padding: '10px 0', gap: '15px'}}>
+                            
+                            <div style={{fontFamily:'monospace', fontSize:'10px'}}> 
+                                <p> {activeMeal}:</p>
+                            </div>
+                            <div style={{display: 'flex', padding: '5px 0', gap: '15px'}}>
+                                
                                 <input value={inputName} 
                                     onChange={(e) => setInputName(e.target.value)}
                                     placeholder="Food name" />
                         
-                                <input value={inputName} 
-                                    onChange={(e) => setInputName(e.target.value)}
+                                <input value={inputKcal} 
+                                    onChange={(e) => setInputKcal(e.target.value)}
                                     placeholder="kcal" />
+
+                                <button onClick={handleQuickAddClick}> Add </button>
+ 
+                            </div>
+
+                            <div>
+                                {pantrySelectedIngredients.map((ingredient) => (
+                                    <div key={ingredient.timeStamp}>
+                                        <button onClick={() => removePantrySelectedIngredient(ingredient.timeStamp)}>
+                                        {ingredient.newAmount}{ingredient.unit} {ingredient.name} - {ingredient.newKcal} kcal  x
+                                         </button>
+                                    </div>
+                                ))}
                             </div>
                         
-                            <div>
-                                <button> Add </button>  
-                                <button onClick={() => setAddFood(false)}> Cancel </button>
+                           
+                            <div style={{paddingTop:'20px'}}> 
+                                <button
+                                        className={pantry ? 'selected' : ''}
+                                        onClick={() => togglePantry(pantry, setPantry, setAddBlock, setAddDish, setCreateDish, 
+                                        setCreateIngredient, setChangeAmountId, setNewAmount, setSelectedIngredients)}
+                                        > My Pantry </button>
                             </div>
+
                         </div>
                     )}
 
-                    {pantry && (<div> 
+                    {addFood && pantry && (<div> 
 
                         <h2> Your items:</h2>
                         <input
@@ -253,51 +388,197 @@ function CalTracker(){
                             placeholder="Search your pantry..."
                         />
 
-                        <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px'}}>
-                        {filteredItems.map((item) => (
-                            <div style={{display:'flex', flexDirection:'row'}}>
-                                <button onClick={() => addConsumed({ ...item, timeStamp: Date.now(), mealType: activeMeal }, setConsumed, selectedDate, consumed)}>
-                                    {item.name} - {item.kcal} kcal
-                                </button>
-                                <button onClick={() => removeItem(item.id)}>x</button>
-                            </div>
+                        <div style={{display:'flex', gap: '5px'}}>
+                        <div className="pantry-dish">
+                            <p>Menu:</p>
+                            <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px'}}>
+                            {filteredItems.map((item) => (
+                                <div key={item.id} style={{display:'flex', flexDirection:'row'}}>
+                                    <button onClick={() => addConsumed({ ...item, timeStamp: Date.now(), mealType: activeMeal }, setConsumed, selectedDate, consumed)}
+                                        title={(item.serving === 0 ? 'Serving: -' : 'Serving: ' + item.serving) + '\n' +
+                                            (item.size === 0 ? 'Size: -' : 'Size: ' + item.size)}> 
+                                        {item.name} - {item.kcal} kcal
+                                    </button>
+                                    {/* <button onClick={() => removeItem(item.id)}>x</button> */}
+                                </div>
                     
-                        ))}
-                        </div>
-
-                        <div style={{padding: '15px 0'}}> 
-                            <button onClick={showAdd}> Add item to your pantry </button>
-                        </div>
-
-                    </div>)}
-
-                    {addBlock && pantry && (<div>
-
-                        <p>Food name:</p>
-                        <input value={inputName} 
-                            onChange={(e) => setInputName(e.target.value)}
-                            placeholder="Food name" />
+                            ))}
+                            <button onClick={() => setAddDish(!addDish)}> + </button>
+                            </div>
+                            <div>
+                                {addDish && pantry && (<div className="input">
+                                    <p style={{fontWeight: 'bold'}}> Add new dish:</p>
+                                    <p>Food name:</p>
+                                    <input value={inputName} 
+                                            onChange={(e) => setInputName(e.target.value)}
+                            placeholder="e.g. Tom Yum/Pad Thai" />
 
                         <p>kcal:</p>
                         <input value={inputKcal} 
                             onChange={(e) => setInputKcal(e.target.value)}
                             placeholder="kcal" />
 
-                        <p>Serving(s) per package:</p>
+                        <p>Serving(s) (optional):</p>
                         <input value={inputServing} 
                             onChange={(e) => setInputServing(e.target.value)}
                             placeholder="serving per package" />
 
-                        <p>Size(mL):</p>
+                        <p>Size(mL) (optional):</p>
                         <input value={inputSize} 
                             onChange={(e) => setInputSize(e.target.value)}
                             placeholder="size (mL)" />  
-                        <div>
+                        <div style={{display: 'flex', gap: '2px', paddingTop: '10px'}}>
                             <button onClick={handleAddClick}> Add </button>
-                            
                             <button onClick={showAdd}> Cancel </button>
                         </div>
+                    </div>)}  
+                            </div>
+                        </div>
+
+                        <div className="pantry-ing">
+                            <p>Ingredient(s):</p>
+                            <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px'}}>
+                                {filteredIngredients.map((ingredient) => (
+                                    <div key={ingredient.id} style={{display:'flex', flexDirection:'row'}}>
+                                        <button onClick={() => { setChangeAmountId(ingredient.id); setNewAmount(ingredient.amount); }}
+                                            title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}`}>
+                                            {ingredient.name} ({ingredient.unit})
+                                        </button>
+                                        
+                                        {changeAmountId === ingredient.id && (
+                                            <>
+                                            <input 
+                                                style={{width: '30px'}}
+                                                value={newAmount}
+                                                onChange={(e) => setNewAmount(e.target.value)}
+                                                />
+
+                                            <button onClick={() => {
+                                                setPantrySelectedIngredients([...pantrySelectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
+                                                setChangeAmountId(null);
+                                                setNewAmount('');
+                                                }}>add</button>
+
+                                            <button onClick={() => { setChangeAmountId(null); setNewAmount(''); }}>cancel</button>
+                                            </>
+                                        )}
+
+                                        {/* {changeAmountId === ingredient.id && <button onClick={() => removeIngredient(ingredient.id)}>x</button>} */}
+                                    
+                                    </div>
+                                ))}
+                                <button onClick={() => setCreateIngredient(!createIngredient)}> + </button>
+
+                                
+                            </div>
+                            <div>
+                                {createIngredient && (<div className="input">
+                                <p style={{fontWeight: 'bold'}}> Add new ingredient:</p>
+                                <p>name</p>
+                                <input value={ingredientName} 
+                                    onChange={(e) => setIngredientName(e.target.value)}
+                                    placeholder="e.g. Shrimp/Chicken"/>
+                                <p>amount</p>
+                                <input value={ingredientAmount} 
+                                    onChange={(e) => setIngredientAmount(e.target.value)}
+                                    placeholder=""/>
+                                <p>unit</p>
+                                <input value={ingredientUnit} 
+                                    onChange={(e) => setIngredientUnit(e.target.value)}
+                                    placeholder="e.g. g/tsp/tbsp"/>
+                                <p>kcal</p>
+                                <input value={ingredientKcal} 
+                                    onChange={(e) => setIngredientKcal(e.target.value)}
+                                    placeholder=""/>
+
+                                <div style={{paddingTop: '10px'}}>
+                                    <button onClick={handleAddInClick}> Add </button>
+                                </div>
+                           
+                            </div>)}
+                            </div>
+                            
+                        </div>
+                            <button style={{height:'fit-content', fontWeight:'bold'}}>⋮</button>
+                        </div>
+
+                        <div style={{padding: '15px 0'}}> 
+                            <button
+                                className={addBlock ? 'selected' : ''}
+                                onClick={() => {setCreateDish(!createDish);}}
+                                > Create new</button>
+                        </div>
+
                     </div>)}
+                    
+
+
+                    {createDish && pantry &&(
+                        <div>
+                            <div>
+                                <p>Dish name:</p>
+                                <input value={inputName}
+                                onChange={(e) => setInputName(e.target.value)}
+                                placeholder="e.g. Tom Yum/Pad Thai" />
+                                <p>Selected ingredient(s):</p>
+                                {selectedIngredients.map((ingredient) => (
+                                    <div key={ingredient.timeStamp}>
+                                        <button onClick={() => removeSelectedIngredient(ingredient.timeStamp)}>
+                                        {ingredient.newAmount}{ingredient.unit} {ingredient.name} - {ingredient.newKcal} kcal  x
+                                         </button>
+                                    </div>
+                                ))}
+                                { selectedIngredients.length > 0 && <div style={{display: 'flex', paddingTop: '10px', gap: '4px'}}>
+                                    <button onClick={handleAddDish}>Add</button>
+                                    <button onClick={() => setSelectedIngredients([])}>Cancel</button>
+                                </div> }
+
+
+                            </div>
+                            
+                            <div className="pantry-ing">
+                                <p>Ingredients:</p>
+                                <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px', paddingTop: '15px'}}>
+                                
+                                    {filteredIngredients.map((ingredient) => (
+                                        <div key={ingredient.id} style={{display:'flex', flexDirection:'row'}}>
+                                            <button onClick={() => { setDishChangeAmountId(ingredient.id); setDishNewAmount(ingredient.amount); }}
+                                                title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}`}>
+                                                {ingredient.name} ({ingredient.unit})
+                                            </button>
+                                        
+                                            {dishChangeAmountId === ingredient.id && (
+                                            <>
+                                                <input 
+                                                style={{width: '30px'}}
+                                                value={newAmount}
+                                                onChange={(e) => setNewAmount(e.target.value)}
+                                                />
+
+                                            <button onClick={() => {
+                                                setSelectedIngredients([...selectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
+                                                setDishChangeAmountId(null);
+                                                setDishNewAmount('');
+                                                }}>add</button>
+
+                                            <button onClick={() => { setDishChangeAmountId(null); setDishNewAmount(''); }}>cancel</button>
+                                            
+                                            </>)}
+
+                                    
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+
+                            
+
+                            
+                        
+                            
+                        </div>
+                    )}
                 </div>
             </div>
         </>

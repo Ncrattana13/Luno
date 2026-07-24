@@ -1,0 +1,39 @@
+.input p{
+
+    font-size: 8px;
+}
+
+.input{
+    font-family: monospace;
+    border: 1px solid black;
+    width: fit-content;
+    padding: 8px 10px;
+    margin-top: 10px;
+}
+
+.input input::placeholder{
+    font-family: monospace;
+    font-size: 10px;
+
+}
+
+.selected {
+    background: var(--red);
+    font-weight: bold;
+}
+
+.pantry-dish{
+    border: 1px solid black;
+    width: 60%;
+    padding: 20px;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.pantry-ing{
+    border: 1px solid black;
+    width: 40%;
+    padding: 20px;
+    font-family: monospace;
+    font-weight: bold;
+}

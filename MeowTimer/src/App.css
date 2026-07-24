@@ -247,5 +247,6 @@ button:active {
 
 #cal-tracker-bottom {
   flex-direction: column;
+  padding-left: 55px;
   /* align-items: center; */
 }
