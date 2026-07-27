@@ -23,9 +23,7 @@ function CalTracker(){
     
     /*Pantry */
     const [pantry, setPantry] = useState(false);
-    const openPantry = () => {
-        setPantry(!pantry);
-    }
+
     const [addBlock, setAddBlock] = useState(false);
 
     const [addDish, setAddDish] = useState(false);
@@ -33,49 +31,62 @@ function CalTracker(){
     const [createIngredient, setCreateIngredient] = useState(false);
     
     const [ingredientName, setIngredientName] = useState(''); 
-    const [ingredientAmount, setIngredientAmount] = useState(0);
+    const [ingredientAmount, setIngredientAmount] = useState('');
     const [ingredientUnit, setIngredientUnit] = useState('');
-    const [ingredientKcal, setIngredientKcal] = useState(0);
+    const [ingredientKcal, setIngredientKcal] = useState('');
+    const [ingredientProtein, setIngredientProtein] = useState('');
 
     const [ingredients, setIngredients] = useState(()=>{
         const saved = localStorage.getItem("ingredients");
-        if (!saved || saved === "undefined") {
+        if (!saved | saved === "undefined") {
             return [{
                 id: crypto.randomUUID(),
                 name: 'Shrimp',
-                amount: 85,
+                amount: 10,
                 unit: 'g',
-                kcal: 84 },
+                kcal: 10,
+                protein: 2.3 },
                 {
                 id: crypto.randomUUID(),
                 name: 'Boil Egg',
                 amount: 1,
-                unit: 'egg',
-                kcal: 75},
+                unit: 'piece 50g',
+                kcal: 75,
+                protein: 6.2 },
+                {
+                id: crypto.randomUUID(),
+                name: 'Boil Egg',
+                amount: 10,
+                unit: 'g',
+                kcal: 15,
+                protein: 1.3 },
             ];
         }
         return JSON.parse(saved);
     });
 
-    const addIngredients = (inName, inAmount, inUnit, inKcal) => {
+    const addIngredients = (inName, inAmount, inUnit, inKcal, inProtein) => {
         const newIngredient = {
             id: crypto.randomUUID(),
             name: inName,
             amount: inAmount,
             unit: inUnit,
-            kcal: inKcal
+            kcal: inKcal,
+            protein: inProtein
         }
         setIngredients([...ingredients, newIngredient]);
     };
 
     const handleAddInClick = () => {
-        addIngredients(ingredientName, ingredientAmount, ingredientUnit, ingredientKcal);
+        addIngredients(ingredientName, Number(ingredientAmount), ingredientUnit, Number(ingredientKcal), Number(ingredientProtein));
         setIngredientName('');
-        setIngredientAmount(0);
-        setIngredientUnit('');
-        setIngredientKcal(0);
+        setIngredientAmount('');
+        setIngredientKcal('');
+        setIngredientProtein('');
         setCreateIngredient(false);
     };
+
+    const [editIngredient, setEditIngredient] = useState(false);
 
     const filteredIngredients = ingredients.filter((ingredient) =>
         ingredient.name.toLowerCase().includes(inputSearch.toLowerCase())
@@ -399,39 +410,40 @@ function CalTracker(){
                                             (item.size === 0 ? 'Size: -' : 'Size: ' + item.size)}> 
                                         {item.name} - {item.kcal} kcal
                                     </button>
-                                    {/* <button onClick={() => removeItem(item.id)}>x</button> */}
+                                    {editIngredient && <button onClick={() => removeItem(item.id)}>x</button> }
                                 </div>
                     
                             ))}
-                            <button onClick={() => setAddDish(!addDish)}> + </button>
+                            { editIngredient && <button onClick={() => setAddDish(!addDish)}> + </button> }
                             </div>
                             <div>
-                                {addDish && pantry && (<div className="input">
+                                {addDish && editIngredient && (<div className="input">
                                     <p style={{fontWeight: 'bold'}}> Add new dish:</p>
                                     <p>Food name:</p>
                                     <input value={inputName} 
                                             onChange={(e) => setInputName(e.target.value)}
-                            placeholder="e.g. Tom Yum/Pad Thai" />
+                                    placeholder="e.g. Tom Yum/Pad Thai" />
 
-                        <p>kcal:</p>
-                        <input value={inputKcal} 
-                            onChange={(e) => setInputKcal(e.target.value)}
-                            placeholder="kcal" />
+                                    <p>kcal:</p>
+                                    <input value={inputKcal} 
+                                        onChange={(e) => setInputKcal(e.target.value)}
+                                        placeholder="kcal" />
 
-                        <p>Serving(s) (optional):</p>
-                        <input value={inputServing} 
-                            onChange={(e) => setInputServing(e.target.value)}
-                            placeholder="serving per package" />
+                                    <p>Serving(s) (optional):</p>
+                                    <input value={inputServing} 
+                                        onChange={(e) => setInputServing(e.target.value)}
+                                        placeholder="serving per package" />
 
-                        <p>Size(mL) (optional):</p>
-                        <input value={inputSize} 
-                            onChange={(e) => setInputSize(e.target.value)}
-                            placeholder="size (mL)" />  
-                        <div style={{display: 'flex', gap: '2px', paddingTop: '10px'}}>
-                            <button onClick={handleAddClick}> Add </button>
-                            <button onClick={showAdd}> Cancel </button>
-                        </div>
-                    </div>)}  
+                                    <p>Size(mL) (optional):</p>
+                                    <input value={inputSize} 
+                                        onChange={(e) => setInputSize(e.target.value)}
+                                        placeholder="size (mL)" />  
+                                    
+                                    <div style={{display: 'flex', gap: '2px', paddingTop: '10px'}}>
+                                        <button onClick={handleAddClick}> Add </button>
+                                        <button onClick={showAdd}> Cancel </button>
+                                    </div>
+                                </div>)}  
                             </div>
                         </div>
 
@@ -441,7 +453,7 @@ function CalTracker(){
                                 {filteredIngredients.map((ingredient) => (
                                     <div key={ingredient.id} style={{display:'flex', flexDirection:'row'}}>
                                         <button onClick={() => { setChangeAmountId(ingredient.id); setNewAmount(ingredient.amount); }}
-                                            title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}`}>
+                                            title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}\nProtein: ${ingredient.protein}g`}>
                                             {ingredient.name} ({ingredient.unit})
                                         </button>
                                         
@@ -459,29 +471,31 @@ function CalTracker(){
                                                 setNewAmount('');
                                                 }}>add</button>
 
-                                            <button onClick={() => { setChangeAmountId(null); setNewAmount(''); }}>cancel</button>
+                                            <button onClick={() => {setChangeAmountId(null); setNewAmount(''); }}>cancel</button>
                                             </>
                                         )}
 
-                                        {/* {changeAmountId === ingredient.id && <button onClick={() => removeIngredient(ingredient.id)}>x</button>} */}
+                                        {editIngredient && <button onClick={() => removeIngredient(ingredient.id)}>x</button>}
                                     
                                     </div>
                                 ))}
-                                <button onClick={() => setCreateIngredient(!createIngredient)}> + </button>
+                                { editIngredient && <button onClick={() => setCreateIngredient(!createIngredient)}> + </button>}
 
                                 
                             </div>
                             <div>
-                                {createIngredient && (<div className="input">
+                                {createIngredient && editIngredient && (<div className="input">
                                 <p style={{fontWeight: 'bold'}}> Add new ingredient:</p>
                                 <p>name</p>
                                 <input value={ingredientName} 
                                     onChange={(e) => setIngredientName(e.target.value)}
-                                    placeholder="e.g. Shrimp/Chicken"/>
+                                    placeholder="e.g. Shrimp/Chicken"
+                                    required
+                                />
                                 <p>amount</p>
                                 <input value={ingredientAmount} 
                                     onChange={(e) => setIngredientAmount(e.target.value)}
-                                    placeholder=""/>
+                                    placeholder="amount"/>
                                 <p>unit</p>
                                 <input value={ingredientUnit} 
                                     onChange={(e) => setIngredientUnit(e.target.value)}
@@ -489,6 +503,11 @@ function CalTracker(){
                                 <p>kcal</p>
                                 <input value={ingredientKcal} 
                                     onChange={(e) => setIngredientKcal(e.target.value)}
+                                    placeholder=""/>
+
+                                <p>protein</p>
+                                <input value={ingredientProtein} 
+                                    onChange={(e) => setIngredientProtein(e.target.value)}
                                     placeholder=""/>
 
                                 <div style={{paddingTop: '10px'}}>
@@ -499,7 +518,7 @@ function CalTracker(){
                             </div>
                             
                         </div>
-                            <button style={{height:'fit-content', fontWeight:'bold'}}>⋮</button>
+                            <button style={{height:'fit-content', fontWeight:'bolder', background: editIngredient ? 'var(--red)': ''}} onClick={() => setEditIngredient((!editIngredient))}>⋮</button>
                         </div>
 
                         <div style={{padding: '15px 0'}}> 
@@ -513,7 +532,7 @@ function CalTracker(){
                     
 
 
-                    {createDish && pantry &&(
+                    {createDish &&(
                         <div>
                             <div>
                                 <p>Dish name:</p>

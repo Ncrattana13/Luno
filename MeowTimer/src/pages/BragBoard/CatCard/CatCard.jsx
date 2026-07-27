@@ -2,33 +2,15 @@ import { useState, useEffect} from 'react';
 import './CatCard.css';
 // import unoImage from "../img/Uno.png";
 
-function CatCard( {cat, handleLocation, handleFav} ) {
-    
-    const storageKey = `like-${cat.id}`;
-
-    const [like, setLike] = useState(() => {
-        const savedLike = localStorage.getItem(storageKey);
-        return savedLike ? JSON.parse(savedLike) : false;
-    });
-
+function CatCard( {cat, handleLocation, handleFav} ) {    
     const [showModal, setShowModal] = useState(false);
-
-    const handleLike = () => {
-        setLike(!like);
-    }
-
-    useEffect(() => {
-        localStorage.setItem(storageKey, JSON.stringify(like));
-    }, [like, storageKey]);
-    
-    console.log(showModal);
 
     return(
         <div>
         <div className='card-box'>
             <div>
-                {!like && <button className='like-button' onClick={handleLike} title="Like">❤︎</button>}
-                {like && <button className='like-button' id='liked' onClick={handleLike} title="Unlike">❤︎</button>}
+                {!cat.fav && <button className='like-button' onClick={() => handleFav(cat.id)} title="Like">❤︎</button>}
+                {cat.fav && <button className='like-button' id="liked" onClick={() => handleFav(cat.id)} title="Unlike">❤︎</button>}
                 <img onClick={() => setShowModal(true)} src={cat.pic}/>
                 <p>Name: {cat.name}</p>
                 <p>Age: {cat.age}</p>

@@ -78,7 +78,7 @@ export const toggleAddBlock = (
 export const validateRequired = (value, setError) => {
     if (!value || !value.toString().trim()) {
         setError(false);
-        setTimeout(() => setError(true), 10); // force shake to replay every time
+        setTimeout(() => setError(true), 10); 
         return false;
     }
     setError(false);
