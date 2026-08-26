@@ -7,6 +7,7 @@ import TestTimer from "./pages/Timer/TestTimer";
 import AboutMe from "./pages/AboutMe/AboutMe";
 import BragBoard from "./pages/BragBoard/BragBoard";
 import CalTracker from "./pages/CalTracker/CalTracker";
+import WatchList from "./pages/WatchList/WatchList";
 
 function App() {
     
@@ -26,10 +27,11 @@ function App() {
       </div>
 
       <div className="nav-bar">
-          <a href="http://localhost:5173/home">Home</a>
+          <a href="http://localhost:5173/">Home</a>
           <a href="http://localhost:5173/brag-board">Bragging Board</a>
           <a href="http://localhost:5173/test-timer">Timer</a>
           <a href="http://localhost:5173/cal-tracker">Calories Tracker</a>
+          <a href="http://localhost:5173/watch-list">Watch List</a>
 
           <p>Calendar</p>
           <a href="http://localhost:5173/about-me">About Me</a>
@@ -41,8 +43,8 @@ function App() {
       </div>
       
       <div className="container">
-        <Switch> 
-          <Route path="/home">
+        <Switch>
+          <Route exact path="/">
             <Home />
           </Route>
           {/* <Route path="/timer">
@@ -59,6 +61,9 @@ function App() {
           </Route>
           <Route path="/cal-tracker">
             <CalTracker />
+          </Route>
+          <Route path="/watch-list">
+            <WatchList />
           </Route>
         </Switch>
       </div>

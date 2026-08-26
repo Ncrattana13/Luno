@@ -2,10 +2,12 @@ import '../Home/Home.css'
 import catImage from '../../img/cat-nobg.png';
 import catClock from '../../img/cat-clock.png';
 import catBrag from '../../img/cat-brag.png';
+import catWorkout from '../../img/workout.png';
 import { useState, useEffect } from "react";
 import dayjs from 'dayjs';
 import { useHistory } from "react-router-dom";
 import Meow from '../../audio/Luna.m4a';
+import LeftNav from "../../components/LeftNav";
 
 
 function TestTimer(){
@@ -73,29 +75,15 @@ function TestTimer(){
 
     return (
         <>
-            <div className="left-container">
-                <div className="home-buttons">
-                    <img style={{width: '120px', alignSelf: 'center'}} src={catClock} />
-                    <div className='select-button'>
-                    <button onClick={() => history.push("/test-timer")}>
-                        <span>Timer</span> 
-                        <img src={catClock} />
-                    </button>
-                    </div>
-                    <button onClick={() => history.push("/brag-board")}>
-                        <span>Board</span>
-                        <img src={catBrag} />
-                    </button>
-                    <button onClick={() => history.push("/")}>
-                        <span>#3</span>
-                        <img src={catImage} />
-                    </button>
-                    <button onClick={() => history.push("/")}>
-                        <span>#4</span>
-                        <img src={catImage} />
-                    </button>
-                </div>
-            </div>
+            <LeftNav
+                icon={catClock}
+                buttons={[
+                    { label: "Timer", icon: catClock, onClick: () => history.push("/test-timer"), selected: true },
+                    { label: "Board", icon: catBrag, onClick: () => history.push("/brag-board") },
+                    { label: "Calories Tracker", icon: catWorkout, onClick: () => history.push("/cal-tracker") },
+                    { label: "Watch List", icon: catImage, onClick: () => history.push("/watch-list") },
+                ]}
+            />
             {/* <Timer />67 */}
             <div className='right-container' id='timer'>
                 <div right-container-header>

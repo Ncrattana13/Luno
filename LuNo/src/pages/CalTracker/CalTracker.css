@@ -5,10 +5,12 @@
 
 .input{
     font-family: monospace;
-    border: 1px solid black;
+    border: 1px solid rgba(11, 79, 108, 0.25);
+    border-radius: var(--radius-sm);
     width: fit-content;
     padding: 8px 10px;
     margin-top: 10px;
+    box-shadow: var(--shadow-sm);
 }
 
 .input input::placeholder{
@@ -23,17 +25,21 @@
 }
 
 .pantry-dish{
-    border: 1px solid black;
+    border: 1px solid rgba(11, 79, 108, 0.2);
+    border-radius: var(--radius-md);
     width: 60%;
     padding: 20px;
     font-family: monospace;
     font-weight: bold;
+    box-shadow: var(--shadow-sm);
 }
 
 .pantry-ing{
-    border: 1px solid black;
+    border: 1px solid rgba(11, 79, 108, 0.2);
+    border-radius: var(--radius-md);
     width: 40%;
     padding: 20px;
     font-family: monospace;
     font-weight: bold;
+    box-shadow: var(--shadow-sm);
 }

@@ -8,7 +8,8 @@ import LuNo from '../../img/LuNo.jpg'
 import { useState, useEffect} from 'react';
 import catWorkout from "../../img/workout.png"
 import { addCat, handleFav } from './BragBoard.helpers';
-
+import { Camera } from 'lucide-react';
+import LeftNav from "../../components/LeftNav";
 
 function BragBoard(){
     const history = useHistory();
@@ -146,32 +147,15 @@ function BragBoard(){
       
     return (
         <>
-            <div className='left-container'>
-                <div className="home-buttons">
-                    <img style={{width: '120px', alignSelf: 'center'}} src={catBrag} />
-                        <button onClick={() => history.push("/test-timer")}>
-                            <span>Timer</span> 
-                            <img src={catClock} />
-                        </button>
-
-                        <div className='select-button'>
-                            <button>
-                                <span>Board</span>
-                                <img src={catBrag} />
-                            </button>
-                        </div>
-
-                        <button onClick={() => history.push("/cal-tracker")}>
-                            <span>Calories Tracker</span>
-                            <img src={catWorkout} />
-                        </button>
-                        <button onClick={() => history.push("/")}>
-                            <span>#4</span>
-                            <img src={catImage} />
-                        </button>
-                </div>
-                    
-            </div>
+            <LeftNav
+                icon={catBrag}
+                buttons={[
+                    { label: "Timer", icon: catClock, onClick: () => history.push("/test-timer") },
+                    { label: "Board", icon: catBrag, selected: true },
+                    { label: "Calories Tracker", icon: catWorkout, onClick: () => history.push("/cal-tracker") },
+                    { label: "Watch List", icon: catImage, onClick: () => history.push("/watch-list") },
+                ]}
+            />
             <div className='right-container'>
                 <div className='right-container-header'> 
                     <h2 style={{padding: '5px', color:'var(--dark-blue)'}}> 
@@ -199,14 +183,14 @@ function BragBoard(){
                         handleFav={onFav}  
                     /> )}
 
-                    {!sortLocation && showFav && (
+                    {!sortLocation && !showFav && (
                         <span
                         className='add-card-box'
                         title='Click to Add'
                         onClick={() => setShowAddModal(true)}
                         >
-                        +
-                    </span>
+                        <Camera size={50}/>
+                        </span>
                     )}
                     
                     {showAddModal && (

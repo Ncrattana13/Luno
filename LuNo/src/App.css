@@ -5,11 +5,42 @@
   --red: #581F18;
   --warm-white: #FDF0D5;
   --font-main: "Lucida Console", Monaco, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-sm: 0 1px 3px rgba(11, 79, 108, 0.12);
+  --shadow-md: 0 6px 16px rgba(11, 79, 108, 0.16);
+  --shadow-lg: 0 12px 28px rgba(11, 79, 108, 0.2);
+
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
 }
 
 body{
     font-family: var(--font-main);
     background-color: var(--warm-white);
+}
+
+input, textarea, select {
+  font-family: inherit;
+  border: 1px solid rgba(11, 79, 108, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  background-color: white;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--dark-blue);
+  box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.15);
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--dark-blue);
+  outline-offset: 2px;
 }
 
 
@@ -53,7 +84,7 @@ body{
 .nav-bar p, a{
   border-inline: 1px solid var(--warm-white);
   padding: 0px 5px;
-  font-size: clamp(9px, 1vw, 12px);  
+  font-size: clamp(9px, 1vw, 12px);
   color: var(--warm-white);
   text-decoration: none;
 }
@@ -83,14 +114,18 @@ button{
   background-color: var(--dark-blue);
   cursor: pointer;
   color: var(--warm-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 button:hover {
   background-color: var(--yellow);
+  box-shadow: var(--shadow-sm);
 }
 
 button:active {
-  /* background-color: #581f18; */
+  transform: scale(0.97);
 }
 
 .me-container{
@@ -99,10 +134,10 @@ button:active {
   width: 80%;
   height: auto;
 
-  border: 2px solid var(--dark-blue);
-  border-radius: 15px;
+  border: 1px solid rgba(11, 79, 108, 0.25);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 
-  /* justify-content: center; */
   flex-direction: column;
 }
 
@@ -130,8 +165,9 @@ button:active {
   background-color: white;
   width: 75vw;
   height: auto;
-  border: 3px solid var(--dark-blue);
-  border-radius: 15px;
+  border: 1px solid rgba(11, 79, 108, 0.2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   padding: 50px;
 }
 
@@ -177,8 +213,10 @@ button:active {
   justify-content: center;
   align-items: center;
 
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
   z-index: 1000;
+  animation: fade-in var(--transition-base);
 }
 
 .modal-content {
@@ -186,16 +224,18 @@ button:active {
   width: 400px;
   max-width: 85%;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background-color: white;
   text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: pop-in var(--transition-base);
 }
 
 .modal-content img {
   width: 100%;
   max-height: 500px;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 
 .modal-close {
@@ -207,12 +247,22 @@ button:active {
   background: none;
   font-size: 30px;
   cursor: pointer;
+  border-radius: 50%;
+  transition: background-color var(--transition-fast);
 }
 
- 
-
 .modal-close:hover {
-  background: none;
+  background: rgba(11, 79, 108, 0.1);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /*--------- Cal Tracker ---------*/

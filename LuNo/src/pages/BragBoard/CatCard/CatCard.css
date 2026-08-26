@@ -5,9 +5,11 @@
     width: 200px;
     height: 320px;
     background-color: white;
-    border: 2px solid var(--red);
-    border-radius: 8px;
-    padding: 10px;    
+    border: 1px solid var(--red);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 10px;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .add-card-box{
@@ -18,14 +20,18 @@
     height: 320px;
     background-color: white;
     border: 2px dashed rgb(145, 137, 137);
-    border-radius: 8px;
-    padding: 10px; 
+    border-radius: var(--radius-md);
+    padding: 10px;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;   
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
     cursor: pointer;
     color: rgb(209, 209, 209);
     font-size: 150px;
 
+}
+
+.add-card-box:hover {
+    border-color: var(--dark-blue);
 }
 
 .card-box img{
@@ -33,6 +39,7 @@
     height: 180px;
     background-color: rgb(216, 216, 216);
     border: 1px solid var(--red);
+    border-radius: var(--radius-sm);
     display: block;
     margin: 0 auto;
     object-fit: cover;
@@ -61,8 +68,7 @@
     border-radius: 50px;
     padding: 2px 8px;
     font-size: 10px;
-    
-    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+    transition: background-color var(--transition-fast);
 }
 
 .card-location button:hover{
@@ -72,7 +78,6 @@
 .like-button {
     position: absolute;
     right: 20px;
-    /* right: 1px; */
     background: none;
     border: none;
     font-size: 18px;
@@ -80,8 +85,7 @@
     padding: 0;
     margin-bottom: 5px;
     color: rgb(142, 126, 126);
-    /* border: 1px solid red; */
-    /* background-color: white; */
+    transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 #liked {
@@ -92,20 +96,15 @@
     background: none;
     border: none;
     color: inherit;
-}
-
-
-.card-box {
-    position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transform: scale(1.15);
 }
 
 .card-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 10px var(--dark-blue);
+    box-shadow: var(--shadow-lg);
 }
 
 .add-card-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 10px var(--dark-blue);
+    box-shadow: var(--shadow-lg);
 }

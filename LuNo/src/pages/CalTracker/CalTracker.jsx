@@ -10,6 +10,10 @@ import './MealCard/MealCard.css'
 import MealCard from "./MealCard/MealCard";
 import './CalTracker.css'
 import { addConsumed, toggleAddFood, togglePantry, toggleAddBlock } from "./CalTracker.helpers";
+import LeftNav from "../../components/LeftNav";
+import LabeledField from "./components/LabeledField";
+import SelectedIngredientChips from "./components/SelectedIngredientChips";
+import IngredientGrid from "./components/IngredientGrid";
 
 function CalTracker(){
     const history = useHistory();
@@ -138,7 +142,7 @@ function CalTracker(){
         setInputServing(0);
         setInputSize(0);
         setCreateDish(false);
-        };
+    };
 
     /*Consumed*/
     const [consumed, setConsumed] = useState(() => {
@@ -243,34 +247,15 @@ function CalTracker(){
 
     return (
         <>
-            <div className='left-container'>
-                <div className="home-buttons">
-                    <img style={{width: '120px', alignSelf: 'center'}} src={catWorkout} />
-                        <button onClick={() => history.push("/test-timer")}>
-                            <span>Timer</span> 
-                            <img src={catClock} />
-                        </button>
-
-                        <div>
-                            <button onClick={() => history.push("/brag-board")}>
-                                <span>Board</span>
-                                <img src={catBrag} />
-                            </button>
-                        </div>
-
-                        <div className='select-button'>
-                        <button >
-                            <span>Calories Tracker</span>
-                            <img src={catWorkout} />
-                        </button>
-                        </div>
-                        <button onClick={() => history.push("/")}>
-                            <span>#4</span>
-                            <img src={catImage} />
-                        </button>
-                </div>
-                    
-            </div>
+            <LeftNav
+                icon={catWorkout}
+                buttons={[
+                    { label: "Timer", icon: catClock, onClick: () => history.push("/test-timer") },
+                    { label: "Board", icon: catBrag, onClick: () => history.push("/brag-board"), wrap: true },
+                    { label: "Calories Tracker", icon: catWorkout, selected: true },
+                    { label: "Watch List", icon: catImage, onClick: () => history.push("/watch-list") },
+                ]}
+            />
 
             <div className='right-container'>
                 <h2>Date: {selectedDate.format("ddd, MMM DD YYYY")}</h2>
@@ -368,13 +353,10 @@ function CalTracker(){
                             </div>
 
                             <div>
-                                {pantrySelectedIngredients.map((ingredient) => (
-                                    <div key={ingredient.timeStamp}>
-                                        <button onClick={() => removePantrySelectedIngredient(ingredient.timeStamp)}>
-                                        {ingredient.newAmount}{ingredient.unit} {ingredient.name} - {ingredient.newKcal} kcal  x
-                                         </button>
-                                    </div>
-                                ))}
+                                <SelectedIngredientChips
+                                    ingredients={pantrySelectedIngredients}
+                                    onRemove={removePantrySelectedIngredient}
+                                />
                             </div>
                         
                            
@@ -419,26 +401,31 @@ function CalTracker(){
                             <div>
                                 {addDish && editIngredient && (<div className="input">
                                     <p style={{fontWeight: 'bold'}}> Add new dish:</p>
-                                    <p>Food name:</p>
-                                    <input value={inputName} 
-                                            onChange={(e) => setInputName(e.target.value)}
-                                    placeholder="e.g. Tom Yum/Pad Thai" />
-
-                                    <p>kcal:</p>
-                                    <input value={inputKcal} 
+                                    <LabeledField
+                                        label="Food name:"
+                                        value={inputName}
+                                        onChange={(e) => setInputName(e.target.value)}
+                                        placeholder="e.g. Tom Yum/Pad Thai"
+                                    />
+                                    <LabeledField
+                                        label="kcal:"
+                                        value={inputKcal}
                                         onChange={(e) => setInputKcal(e.target.value)}
-                                        placeholder="kcal" />
-
-                                    <p>Serving(s) (optional):</p>
-                                    <input value={inputServing} 
+                                        placeholder="kcal"
+                                    />
+                                    <LabeledField
+                                        label="Serving(s) (optional):"
+                                        value={inputServing}
                                         onChange={(e) => setInputServing(e.target.value)}
-                                        placeholder="serving per package" />
-
-                                    <p>Size(mL) (optional):</p>
-                                    <input value={inputSize} 
+                                        placeholder="serving per package"
+                                    />
+                                    <LabeledField
+                                        label="Size(mL) (optional):"
+                                        value={inputSize}
                                         onChange={(e) => setInputSize(e.target.value)}
-                                        placeholder="size (mL)" />  
-                                    
+                                        placeholder="size (mL)"
+                                    />
+
                                     <div style={{display: 'flex', gap: '2px', paddingTop: '10px'}}>
                                         <button onClick={handleAddClick}> Add </button>
                                         <button onClick={showAdd}> Cancel </button>
@@ -449,66 +436,58 @@ function CalTracker(){
 
                         <div className="pantry-ing">
                             <p>Ingredient(s):</p>
-                            <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px'}}>
-                                {filteredIngredients.map((ingredient) => (
-                                    <div key={ingredient.id} style={{display:'flex', flexDirection:'row'}}>
-                                        <button onClick={() => { setChangeAmountId(ingredient.id); setNewAmount(ingredient.amount); }}
-                                            title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}\nProtein: ${ingredient.protein}g`}>
-                                            {ingredient.name} ({ingredient.unit})
-                                        </button>
-                                        
-                                        {changeAmountId === ingredient.id && (
-                                            <>
-                                            <input 
-                                                style={{width: '30px'}}
-                                                value={newAmount}
-                                                onChange={(e) => setNewAmount(e.target.value)}
-                                                />
-
-                                            <button onClick={() => {
-                                                setPantrySelectedIngredients([...pantrySelectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
-                                                setChangeAmountId(null);
-                                                setNewAmount('');
-                                                }}>add</button>
-
-                                            <button onClick={() => {setChangeAmountId(null); setNewAmount(''); }}>cancel</button>
-                                            </>
-                                        )}
-
-                                        {editIngredient && <button onClick={() => removeIngredient(ingredient.id)}>x</button>}
-                                    
-                                    </div>
-                                ))}
-                                { editIngredient && <button onClick={() => setCreateIngredient(!createIngredient)}> + </button>}
-
-                                
-                            </div>
+                            <IngredientGrid
+                                ingredients={filteredIngredients}
+                                changeAmountId={changeAmountId}
+                                amountValue={newAmount}
+                                onAmountChange={(e) => setNewAmount(e.target.value)}
+                                onStartEdit={(ingredient) => { setChangeAmountId(ingredient.id); setNewAmount(ingredient.amount); }}
+                                onConfirm={(ingredient) => {
+                                    setPantrySelectedIngredients([...pantrySelectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
+                                    setChangeAmountId(null);
+                                    setNewAmount('');
+                                }}
+                                onCancel={() => { setChangeAmountId(null); setNewAmount(''); }}
+                                getTitle={(ingredient) => `amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}\nProtein: ${ingredient.protein}g`}
+                                showRemove={editIngredient}
+                                onRemove={removeIngredient}
+                                showAddButton={editIngredient}
+                                onAddButtonClick={() => setCreateIngredient(!createIngredient)}
+                            />
                             <div>
                                 {createIngredient && editIngredient && (<div className="input">
                                 <p style={{fontWeight: 'bold'}}> Add new ingredient:</p>
-                                <p>name</p>
-                                <input value={ingredientName} 
+                                <LabeledField
+                                    label="name"
+                                    value={ingredientName}
                                     onChange={(e) => setIngredientName(e.target.value)}
                                     placeholder="e.g. Shrimp/Chicken"
                                     required
                                 />
-                                <p>amount</p>
-                                <input value={ingredientAmount} 
+                                <LabeledField
+                                    label="amount"
+                                    value={ingredientAmount}
                                     onChange={(e) => setIngredientAmount(e.target.value)}
-                                    placeholder="amount"/>
-                                <p>unit</p>
-                                <input value={ingredientUnit} 
+                                    placeholder="amount"
+                                />
+                                <LabeledField
+                                    label="unit"
+                                    value={ingredientUnit}
                                     onChange={(e) => setIngredientUnit(e.target.value)}
-                                    placeholder="e.g. g/tsp/tbsp"/>
-                                <p>kcal</p>
-                                <input value={ingredientKcal} 
+                                    placeholder="e.g. g/tsp/tbsp"
+                                />
+                                <LabeledField
+                                    label="kcal"
+                                    value={ingredientKcal}
                                     onChange={(e) => setIngredientKcal(e.target.value)}
-                                    placeholder=""/>
-
-                                <p>protein</p>
-                                <input value={ingredientProtein} 
+                                    placeholder=""
+                                />
+                                <LabeledField
+                                    label="protein"
+                                    value={ingredientProtein}
                                     onChange={(e) => setIngredientProtein(e.target.value)}
-                                    placeholder=""/>
+                                    placeholder=""
+                                />
 
                                 <div style={{paddingTop: '10px'}}>
                                     <button onClick={handleAddInClick}> Add </button>
@@ -540,13 +519,10 @@ function CalTracker(){
                                 onChange={(e) => setInputName(e.target.value)}
                                 placeholder="e.g. Tom Yum/Pad Thai" />
                                 <p>Selected ingredient(s):</p>
-                                {selectedIngredients.map((ingredient) => (
-                                    <div key={ingredient.timeStamp}>
-                                        <button onClick={() => removeSelectedIngredient(ingredient.timeStamp)}>
-                                        {ingredient.newAmount}{ingredient.unit} {ingredient.name} - {ingredient.newKcal} kcal  x
-                                         </button>
-                                    </div>
-                                ))}
+                                <SelectedIngredientChips
+                                    ingredients={selectedIngredients}
+                                    onRemove={removeSelectedIngredient}
+                                />
                                 { selectedIngredients.length > 0 && <div style={{display: 'flex', paddingTop: '10px', gap: '4px'}}>
                                     <button onClick={handleAddDish}>Add</button>
                                     <button onClick={() => setSelectedIngredients([])}>Cancel</button>
@@ -557,45 +533,22 @@ function CalTracker(){
                             
                             <div className="pantry-ing">
                                 <p>Ingredients:</p>
-                                <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', gap: '5px', paddingTop: '15px'}}>
-                                
-                                    {filteredIngredients.map((ingredient) => (
-                                        <div key={ingredient.id} style={{display:'flex', flexDirection:'row'}}>
-                                            <button onClick={() => { setDishChangeAmountId(ingredient.id); setDishNewAmount(ingredient.amount); }}
-                                                title={`amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}`}>
-                                                {ingredient.name} ({ingredient.unit})
-                                            </button>
-                                        
-                                            {dishChangeAmountId === ingredient.id && (
-                                            <>
-                                                <input 
-                                                style={{width: '30px'}}
-                                                value={newAmount}
-                                                onChange={(e) => setNewAmount(e.target.value)}
-                                                />
-
-                                            <button onClick={() => {
-                                                setSelectedIngredients([...selectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
-                                                setDishChangeAmountId(null);
-                                                setDishNewAmount('');
-                                                }}>add</button>
-
-                                            <button onClick={() => { setDishChangeAmountId(null); setDishNewAmount(''); }}>cancel</button>
-                                            
-                                            </>)}
-
-                                    
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-
-                            
-
-                            
-                        
-                            
+                                <IngredientGrid
+                                    ingredients={filteredIngredients}
+                                    changeAmountId={dishChangeAmountId}
+                                    amountValue={newAmount}
+                                    onAmountChange={(e) => setNewAmount(e.target.value)}
+                                    onStartEdit={(ingredient) => { setDishChangeAmountId(ingredient.id); setDishNewAmount(ingredient.amount); }}
+                                    onConfirm={(ingredient) => {
+                                        setSelectedIngredients([...selectedIngredients, { ...ingredient, timeStamp: Date.now(), newAmount: Number(newAmount), newKcal: kcalCalculation(ingredient.amount, ingredient.kcal, Number(newAmount)) }]);
+                                        setDishChangeAmountId(null);
+                                        setDishNewAmount('');
+                                    }}
+                                    onCancel={() => { setDishChangeAmountId(null); setDishNewAmount(''); }}
+                                    getTitle={(ingredient) => `amount: ${ingredient.amount}${ingredient.unit}\nkcal: ${ingredient.kcal}`}
+                                    style={{ paddingTop: '15px' }}
+                                />
+                            </div>                            
                         </div>
                     )}
                 </div>
