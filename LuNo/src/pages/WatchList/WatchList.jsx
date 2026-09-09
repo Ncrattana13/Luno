@@ -4,6 +4,7 @@ import catImage from '../../img/cat-nobg.png';
 import catClock from '../../img/cat-clock.png';
 import catBrag from '../../img/cat-brag.png';
 import catWorkout from '../../img/workout.png';
+import catRecipe from '../../img/cat-recipe.png';
 import { useHistory } from "react-router-dom";
 import LeftNav from "../../components/LeftNav";
 import MiniCalendar from "./MiniCalendar";
@@ -233,6 +234,7 @@ function WatchList(){
                     { label: "Board", icon: catBrag, onClick: () => history.push("/brag-board") },
                     { label: "Calories Tracker", icon: catWorkout, onClick: () => history.push("/cal-tracker") },
                     { label: "Watch List", icon: catImage, selected: true },
+                    { label: "Meal Idea", icon: catRecipe, onClick: () => history.push("/meal-idea") },
                 ]}
             />
 

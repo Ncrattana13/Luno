@@ -5,6 +5,7 @@ import "../../App.css"
 import catImage from '../../img/cat-nobg.png';
 import catClock from '../../img/cat-clock.png';
 import catBrag from '../../img/cat-brag.png';
+import catRecipe from '../../img/cat-recipe.png';
 import { useHistory } from "react-router-dom";
 import './MealCard/MealCard.css'
 import MealCard from "./MealCard/MealCard";
@@ -254,6 +255,7 @@ function CalTracker(){
                     { label: "Board", icon: catBrag, onClick: () => history.push("/brag-board"), wrap: true },
                     { label: "Calories Tracker", icon: catWorkout, selected: true },
                     { label: "Watch List", icon: catImage, onClick: () => history.push("/watch-list") },
+                    { label: "Meal Idea", icon: catRecipe, onClick: () => history.push("/meal-idea") },
                 ]}
             />
 

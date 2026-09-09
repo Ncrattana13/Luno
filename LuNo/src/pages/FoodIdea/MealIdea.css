@@ -1,0 +1,130 @@
+.meal-idea-search {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+.meal-idea-search input {
+    width: 260px;
+}
+
+.meal-idea-error {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.meal-idea-hint {
+    color: var(--dark-blue);
+    font-style: italic;
+}
+
+.meal-idea-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    padding-top: 10px;
+    max-width: 100%;
+}
+
+.meal-idea-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.meal-idea-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.meal-idea-card span {
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.meal-idea-match-badge {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.meal-idea-thumb {
+    width: 100%;
+    max-width: 120px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+.meal-idea-modal-content {
+    width: 640px;
+    max-width: 90vw;
+    text-align: left;
+}
+
+.meal-idea-modal-body {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.meal-idea-modal-body .meal-idea-modal-image {
+    width: 220px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.meal-idea-modal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.meal-idea-modal-details h2 {
+    margin: 0;
+}
+
+.meal-idea-ingredient-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 280px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meal-idea-ingredient {
+    font-size: 13px;
+}
+
+.meal-idea-ingredient.have {
+    color: inherit;
+}
+
+.meal-idea-ingredient.missing {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.meal-idea-more-details {
+    align-self: flex-start;
+    color: var(--dark-blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.meal-idea-more-details:hover {
+    text-decoration: underline;
+}

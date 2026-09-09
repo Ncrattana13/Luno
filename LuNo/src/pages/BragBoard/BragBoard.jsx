@@ -7,6 +7,7 @@ import CatCard from './CatCard/CatCard'
 import LuNo from '../../img/LuNo.jpg'
 import { useState, useEffect} from 'react';
 import catWorkout from "../../img/workout.png"
+import catRecipe from '../../img/cat-recipe.png';
 import { addCat, handleFav } from './BragBoard.helpers';
 import { Camera } from 'lucide-react';
 import LeftNav from "../../components/LeftNav";
@@ -154,6 +155,7 @@ function BragBoard(){
                     { label: "Board", icon: catBrag, selected: true },
                     { label: "Calories Tracker", icon: catWorkout, onClick: () => history.push("/cal-tracker") },
                     { label: "Watch List", icon: catImage, onClick: () => history.push("/watch-list") },
+                    { label: "Meal Idea", icon: catRecipe, onClick: () => history.push("/meal-idea") },
                 ]}
             />
             <div className='right-container'>

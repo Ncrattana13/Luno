@@ -8,6 +8,7 @@ import AboutMe from "./pages/AboutMe/AboutMe";
 import BragBoard from "./pages/BragBoard/BragBoard";
 import CalTracker from "./pages/CalTracker/CalTracker";
 import WatchList from "./pages/WatchList/WatchList";
+import MealIdea from "./pages/FoodIdea/MealIdea";
 
 function App() {
     
@@ -32,6 +33,7 @@ function App() {
           <a href="http://localhost:5173/test-timer">Timer</a>
           <a href="http://localhost:5173/cal-tracker">Calories Tracker</a>
           <a href="http://localhost:5173/watch-list">Watch List</a>
+          <a href="http://localhost:5173/meal-idea">Meal Idea</a>
 
           <p>Calendar</p>
           <a href="http://localhost:5173/about-me">About Me</a>
@@ -64,6 +66,9 @@ function App() {
           </Route>
           <Route path="/watch-list">
             <WatchList />
+          </Route>
+          <Route path="/meal-idea">
+            <MealIdea />
           </Route>
         </Switch>
       </div>
